@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        label 'master'
+    }
+
+    parameters {
+        string(name: 'TAG', description: 'Branch Name')
+    }
+
+    stages {
+        stage("Deploy image weblogic-lott") {
+            steps {
+                script {
+                    def fileContents = readFile file: "/var/docker_workspace/deploy_image/.env"
+
+                    fileContents = fileContents.replaceAll("TAG=.*", "TAG="+params.TAG)
+                    echo fileContents
+                    writeFile file: "/var/docker_workspace/deploy_image/.env", text: fileContents
+
+                    sh 'docker-compose -f /var/docker_workspace/deploy_image/docker-compose.yml --env-file /var/docker_workspace/deploy_image/.env up -d'
+
+                }
+
+            }
+        }
+    }
+
+}

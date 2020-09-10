@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'TAG', description: 'Branch Name')
+        string(name: 'LGS_DEPLOY_NUM', description: 'LGS Deploy build number', defaultValue: "923")
+        string(name: 'LGW_DEPLOY_NUM', description: 'LGW Deploy build number', defaultValue: "651")
+        string(name: 'LDS_DEPLOY_NUM', description: 'LDS Deploy build number', defaultValue: "522")
+    }
+
+    stages {
+        stage("Copy Artifact") {
+            agent {
+                label 'master'
+            }
+            steps {
+                parallel(
+                    "Copy LGS artifact":  {
+                        sh label: '', script: 'scp root@jenkins-ge.tc-gaming.co:"/var/lib/jenkins/jobs/210\\ LGS\\ Deployment/builds/'+ params.LGS_DEPLOY_NUM + '/archive/*.war" /var/docker_workspace/build_image/war'
+                    },
+                    "Copy LGW artifact": {
+                        sh label: '', script: 'scp root@jenkins-ge.tc-gaming.co:"/var/lib/jenkins/jobs/213\\ LGW\\ Deployment/builds/'+ params.LGW_DEPLOY_NUM + '/archive/*.war" /var/docker_workspace/build_image/war'
+                    },
+                    "Copy LDS artifact": {
+                        sh label: '', script: 'scp root@jenkins-ge.tc-gaming.co:"/var/lib/jenkins/jobs/212\\ LDS\\ Deployment/builds/'+ params.LDS_DEPLOY_NUM + '/archive/*.war" /var/docker_workspace/build_image/war'
+                    }
+                )
+            }
+        }
+
+        stage("Building image weblogic-lott") {
+            steps {
+                script {
+                    def fileContents = readFile file: "/var/docker_workspace/build_image/.env"
+
+                    fileContents = fileContents.replaceAll("TAG=.*", "TAG="+params.TAG)
+                    echo fileContents
+                    writeFile file: "/var/docker_workspace/build_image/.env", text: fileContents
+
+                    sh 'docker-compose -f /var/docker_workspace/build_image/docker-compose.yml --env-file /var/docker_workspace/build_image/.env build'
+                }
+
+            }
+        }
+
+        stage("Push Image to Registry") {
+            steps {
+                sh 'docker push 172.18.191.14:5000/st.win/weblogic-lott:'+params.TAG
+            }
+        }
+    }
+}
