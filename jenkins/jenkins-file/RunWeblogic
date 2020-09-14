@@ -1,3 +1,5 @@
+def taskWorkspace = "/home/docker_workspace/run_weblogic"
+
 pipeline {
     agent {
         label 'master'
@@ -11,13 +13,13 @@ pipeline {
         stage("Deploy image weblogic-lott") {
             steps {
                 script {
-                    def fileContents = readFile file: "/var/docker_workspace/deploy_image/.env"
+                    def fileContents = readFile file: "${taskWorkspace}/.env"
 
-                    fileContents = fileContents.replaceAll("TAG=.*", "TAG="+params.TAG)
+                    fileContents = fileContents.replaceAll("TAG=.*", "TAG=${TAG}")
                     echo fileContents
-                    writeFile file: "/var/docker_workspace/deploy_image/.env", text: fileContents
+                    writeFile file: "${taskWorkspace}/.env", text: fileContents
 
-                    sh 'docker-compose -f /var/docker_workspace/deploy_image/docker-compose.yml --env-file /var/docker_workspace/deploy_image/.env up -d'
+                    sh "docker-compose -f ${taskWorkspace}/docker-compose.yml --env-file ${taskWorkspace}/.env up -d"
 
                 }
 
