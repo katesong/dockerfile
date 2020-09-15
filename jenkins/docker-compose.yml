@@ -5,20 +5,17 @@ services:
     image: jenkins/jenkins:lts
     build: .
     ports:
-      - 9080:8080
-      - 50000:50000
+      - 8080:8080
     volumes:
       - /home/docker_workspace:/home/docker_workspace
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
       - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+    links:
+      - 'TCG_LOTT_DB:TCG_LOTT_DB'
     container_name: jenkins_docker
 
 volumes:
   jenkins_home:
-    name:jenkins_home
-networks:
-  default:
-    external:
-      name: network-lott
+    name: jenkins_home

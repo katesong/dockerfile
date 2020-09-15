@@ -20,13 +20,13 @@ pipeline {
                 parallel(
 
                     "Copy LGS artifact":  {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/210\\ LGS\\ Deployment/builds/"+ params.LGS_DEPLOY_NUM + "/archive/*.war' ${warPath}"
+                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/210\\ LGS\\ Deployment/builds/${LGS_DEPLOY_NUM}/archive/*.war' ${warPath}"
                     },
                     "Copy LGW artifact": {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/213\\ LGW\\ Deployment/builds/"+ params.LGW_DEPLOY_NUM + "/archive/*.war' ${warPath}"
+                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/213\\ LGW\\ Deployment/builds/${LGW_DEPLOY_NUM}/archive/*.war' ${warPath}"
                     },
                     "Copy LDS artifact": {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/212\\ LDS\\ Deployment/builds/"+ params.LDS_DEPLOY_NUM + "/archive/*.war' ${warPath}"
+                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/212\\ LDS\\ Deployment/builds/${LDS_DEPLOY_NUM}/archive/*.war' ${warPath}"
                     }
                 )
             }

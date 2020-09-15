@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  weblogic-lott:
+    container_name: "lott-${TAG}"
+    image: 172.18.191.17:5000/st.win/weblogic-lott:${TAG}
+    ports:
+      - "7001-7010:7001"
+    stdin_open: true
+    tty: true
+    hostname: 'lott-${TAG}'
+    extra_hosts:
+      - "lott-db:${DB_IP}"
+      - "TCG-MQS01:${MQS_IP}"
+      - "TCG-DCS01:${DCS_IP}"
+      - "TCG-LGS-READYONLY:${LGS_RO_IP}"
+      - "TCG-LGS-TRIAL01:${LGS_TRY_IP}"
+      - "TCG-B2B-GATEWAY01:${B2B_GW_IP}"
+      - "TCG-USS01:${USS_IP}"
+      - "TCG-ACS01:${ACS_IP}"
+      - "TCG-OSS01:${OSS_IP}"
+      - "TCG-KAFKA01:${KAFKA_IP}"
+      - "TCG-LGS-REDIS01:${REDIS_IP}"
+      - "TCG-LGS-REDIS02:${REDIS_IP}"
+      - "TCG-LOTTERY01:${DCS_IP}"
+      - "TCG-LOTTERY02:127.0.0.1"
+      - "TCG-LOTTERY03:127.0.0.1"
