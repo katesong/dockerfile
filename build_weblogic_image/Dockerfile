@@ -1,4 +1,4 @@
-FROM 172.18.191.17:5000/st.win/weblogic-lott:master
+FROM 10.8.90.189:5000/st.win/weblogic-lott:master
 USER weblogic
 
 ADD war /home/weblogic/war

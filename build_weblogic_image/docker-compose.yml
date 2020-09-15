@@ -2,8 +2,8 @@ version: "3.8"
 services:
   weblogic-lott:
     build:
-      context: ..
+      context: ../weblogic
       args:
         - SERVICE_NAME=${SERVICE_NAME}
         - WAR_NAME=${WAR_NAME}
-    image: 172.18.191.17:5000/st.win/weblogic-lott:${TAG}
+    image: 10.8.90.189:5000/st.win/weblogic-lott:${TAG}
