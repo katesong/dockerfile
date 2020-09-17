@@ -2,7 +2,7 @@ version: "3.8"
 services:
   weblogic-lott:
     build:
-      context: ../weblogic
+      context: ""
       args:
         - SERVICE_NAME=${SERVICE_NAME}
         - WAR_NAME=${WAR_NAME}
