@@ -1,5 +1,5 @@
 def taskWorkspace = '/home/jenkins_workspace/build_weblogic_image'
-def warPath = '/home/jenkins_workspace/build_weblogic_image/war'
+def warPath = '/home/jenkins_workspace/build_weblogic_image/war/.'
 def dockerHost = '10.8.90.189'
 pipeline {
     agent any
