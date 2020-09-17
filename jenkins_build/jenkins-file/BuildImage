@@ -1,14 +1,16 @@
-def taskWorkspace = '/home/docker_workspace/build_weblogic_image'
-def warPath = '/home/docker_workspace/build_weblogic_image/war'
+def taskWorkspace = '/home/jenkins_workspace/build_weblogic_image'
+def warPath = '/home/jenkins_workspace/build_weblogic_image/war'
 def dockerHost = '10.8.90.189'
 pipeline {
     agent any
 
     parameters {
         string(name: 'TAG', description: 'Branch Name')
-        string(name: 'LGS_DEPLOY_NUM', description: 'LGS Deploy build number')
-        string(name: 'LDS_DEPLOY_NUM', description: 'LDS Deploy build number')
-        string(name: 'LGW_DEPLOY_NUM', description: 'LGW Deploy build number')
+        string(name: 'LGS_DEPLOY_NUM', description: 'LGS Deployment build number')
+        string(name: 'LGW_DEPLOY_NUM', description: 'LGW Deployment build number')
+        string(name: 'LDS_DEPLOY_NUM', description: 'LDS Deployment build number')
+        string(name: 'LGS_VN_DEPLOY_NUM', description: 'LGS-VN Deployment build number')
+        string(name: 'LGW_VN_DEPLOY_NUM', description: 'LGW-VN Deployment build number')
     }
 
     stages {
@@ -18,15 +20,33 @@ pipeline {
             }
             steps {
                 parallel(
-
                     "Copy LGS artifact":  {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/210\\ LGS\\ Deployment/builds/${LGS_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                        script {
+                            if ( params.LGS_DEPLOY_NUM ) {
+                                sh "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/210\\ LGS\\ Deployment/builds/${LGS_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                            }
+                        }
                     },
                     "Copy LGW artifact": {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/213\\ LGW\\ Deployment/builds/${LGW_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                        script {
+                            if ( params.LGW_DEPLOY_NUM ) {
+                                sh "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/213\\ LGW\\ Deployment/builds/${LGW_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                            }
+                        }
                     },
                     "Copy LDS artifact": {
-                        sh label: '', script: "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/212\\ LDS\\ Deployment/builds/${LDS_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                        script {
+                            if ( params.LDS_DEPLOY_NUM ) {
+                                sh "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/212\\ LDS\\ Deployment/builds/${LDS_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                            }
+                        }
+                    },
+                    "Copy LGS-VN artifact": {
+                        script {
+                            if ( params.LGS_VN_DEPLOY_NUM ) {
+                                sh "scp root@jenkins-ge.tc-gaming.co:'/var/lib/jenkins/jobs/210\\ LGS-VN\\ Deployment/builds/${LGS_VN_DEPLOY_NUM}/archive/*.war' ${warPath}"
+                            }
+                        }
                     }
                 )
             }

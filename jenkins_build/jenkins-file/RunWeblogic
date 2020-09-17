@@ -1,4 +1,4 @@
-def taskWorkspace = "/home/docker_workspace/run_weblogic"
+def taskWorkspace = "/home/jenkins_workspace/run_weblogic"
 
 pipeline {
     agent {
