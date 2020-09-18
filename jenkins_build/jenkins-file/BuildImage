@@ -69,7 +69,7 @@ pipeline {
 
         stage("Push Image to Registry") {
             steps {
-                sh "docker push {dockerHost}:5000/st.win/weblogic-lott:${TAG}"
+                sh "docker push ${dockerHost}:5000/st.win/weblogic-lott:${TAG}"
             }
         }
     }
