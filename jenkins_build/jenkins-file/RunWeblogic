@@ -7,6 +7,7 @@ pipeline {
 
     parameters {
         string(name: 'TAG', description: 'Branch Name')
+        choice(name: 'DB_IP', choices: ['TCG_LOTT_DB', 'TCG_LOTT_DB_2'])
     }
 
     stages {
@@ -16,6 +17,7 @@ pipeline {
                     def fileContents = readFile file: "${taskWorkspace}/.env"
 
                     fileContents = fileContents.replaceAll("TAG=.*", "TAG=${TAG}")
+                    fileContents = fileContents.replaceAll("DB_IP=.*", "DB_IP=${DB_IP}")
                     echo fileContents
                     writeFile file: "${taskWorkspace}/.env", text: fileContents
 
